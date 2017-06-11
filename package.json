@@ -1,0 +1,19 @@
+{
+    "name": "you-tube-viewer",
+    "version": "1.0.0",
+    "description": "Custom youTube Viewer--search and watch videos",
+    "main": "index.html",
+    "dependencies": {
+        "bootstrap": "^3.3.7",
+        "jquery": "^3.2.1"
+    },
+    "devDependencies": {
+        "http-server": "^0.10.0"
+    },
+    "scripts": {
+        "start": "http-server",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Erin Kelkar",
+    "license": "MIT"
+}
