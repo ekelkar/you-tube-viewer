@@ -3,13 +3,20 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Video Watcher</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Per Bootstrap documentation, the above 3 meta tags *must* come first in
+       the head; any other head content must come *after* these tags -->
+  
+  <title>You Tube Video Watcher</title>
 
   <!-- For more on conditional CDN loading see the following
        http://eddmann.com/posts/providing-local-js-and-css-resources-for-cdn-fallbacks/ -->
 
-  <!-- The following script and link elements loads bootstrap either from the
+  <!-- The following script and link elements loads Bootstrap either from the
        CDN or the local source if the CDN load fails.
+       The following code uses straight JavaScript since jQuery is not loaded
+       when this code is executed.
        Test by disabling caching from the network tab of Chrome Developer Tools
        and turning off internet connection, Of course, the whole app will
        not work in that case. :-) -->
@@ -25,10 +32,14 @@
   </script>
 
   <!-- Latest compiled and minified CSS -->
-  <link id="bootStrap" onerror="loadLocalBootstrapCSS()" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" -->
+  <!-- onerror might not work for IE. Check! --> 
+  <!-- From getbootstrap.com -->
+  <link id="bootStrap" onerror="loadLocalBootstrapCSS()" rel="stylesheet" 
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+    crossorigin="anonymous">
 
- <!-- Repeat the above for the optional bootstrap theme -->
+  <!-- Repeat the above for the optional bootstrap theme -->
   <script>
     function loadLocalBootstrapTheme() {
       console.log('Load local Bootstrap Theme');
@@ -40,8 +51,8 @@
     };
   </script>
 
-  <link id="bootStrapTheme" onerror="loadLocalBootstrapTheme()" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-    crossorigin="anonymous">
+  <link id="bootStrapTheme" onerror="loadLocalBootstrapTheme()" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
   <style type="text/css">
     /* This puts titles always on a separate line from thumbnails */
@@ -66,7 +77,7 @@
         </a>
       </div>
 
-      <form class="navbar-form navbar-right" role="search">
+      <form class="navbar-form navbar-right" role="search" id="searchForm">
         <div class="input-group">
           <input class="form-control" id="searchFor" type="text" placeholder="Search">
           <span class="input-group-btn">
@@ -75,6 +86,7 @@
             </button>
           </span>
         </div>
+      </form>
   </nav>
 
   <div class="container">
@@ -95,8 +107,8 @@
             </div>
           </div>>
         </div>-->
-        <ul class="list-unstyled" id="videos-list3"></ul>
-        <ul class="list-unstyled" id="videos-list2"></ul>
+        <!--ul class="list-unstyled" id="videos-list3"></ul>
+        <ul class="list-unstyled" id="videos-list2"></ul-->
         <ul class="list-unstyled" id="videos-list"></ul>
       </div>
       <div class="col-md-9" id="video-watcher"></div>
@@ -127,9 +139,8 @@
     window.jQuery || document.write('<script src="/node_modules/jquery/dist/jquery.js"><\/script>');
   </script>
 
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
+  <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script-->
 
   <script>
     window.jQuery.fn.modal || document.write('<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"><\/script>');
@@ -137,8 +148,8 @@
 
   <script src="youtube.js"></script>
   <script src="you_tube_key.js"></script>
-  <script>
-    /* TODO: Update the method below using the real data from YouTube
+  <script src="myyoutube.js"></script>
+    <!-- /* TODO: Update the method below using the real data from YouTube
          * hint: debug using the browser developer tools to see the structure
          */
     'use strict';
@@ -273,7 +284,7 @@
 
       console.log('you tube key:', youTubeKey);
     });
-  </script>
+  </script> -->
 </body>
 
 </html>
