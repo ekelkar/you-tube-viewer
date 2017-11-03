@@ -4,16 +4,52 @@
 $(document).ready(function () {
   console.log('document ready jQuery: ', window.jQuery);
 
-  function createVideoImgElement (video) {
+  function handleVideoClick (event) {
+
+    function createVideoEmbedElement () {
+      let videoEmbedElement = $('<iframe></iframe>');
+      // let videoId = video.id.videoId;  // old way
+      let videoId = $(event.currentTarget).attr('data-video-id');
+      videoEmbedElement.attr('src', youtube.generateEmbedUrl(videoId));
+      videoEmbedElement.attr('width', 560);
+      videoEmbedElement.attr('height', 318);
+      return videoEmbedElement;
+    };
+
+    event.preventDefault();
+    let videoHead = $('<h2>');
+    // let videoTitle = video.snippet.title;
+    let videoTitle = $(event.currentTarget).attr('data-video-title');
+    // let videoId = $(event.currentTarget).attr('data-video-id');
+    videoHead.html(videoTitle);
+
+    var videoWatcher = $('#video-watcher');
+    // videoWatcher.hide();  // hide the matched elements
+    // remove all child nodes of the set of matched elements from the DOM
+    videoWatcher.empty();
+    videoWatcher.append(videoTitle);
+    videoWatcher.append(createVideoEmbedElement());
+    videoWatcher.show();
+    // videoWatcher.fadeIn(); // display the matched elements by fading them to opaque
+  };
+
+  function createVideoDiv (video) {
+    let videoDiv = $('<div>');
+    videoDiv.attr('data-video-id', video.id.videoId);
+    videoDiv.attr('data-video-title', video.snippet.title);
+    return videoDiv;
+  }
+
+  function createVideoImg (video) {
     let thumbnailImg = $('<img>');
     thumbnailImg.attr('src', video.snippet.thumbnails.default.url);
     return thumbnailImg;
   }
 
-  function createVideoHeadingElement(video) {
+  function createVideoHeading (video) {
     return $('<h5>' + video.snippet.title + '</h5>');
   }
-
+  
   function addVideoToList(video) {
     console.log(video);
 
@@ -25,11 +61,11 @@ $(document).ready(function () {
     // tnailImg.attr('src', video.snippet.thumbnails.default.url);
 
     // Create a div to put info into
-    let videoDiv = $('<div>');
+    let videoDiv = createVideoDiv(video);
 
     // Add the image element and the heading
-    videoDiv.append(createVideoImgElement(video));
-    videoDiv.append(createVideoHeadingElement(video));
+    videoDiv.append(createVideoImg(video));
+    videoDiv.append(createVideoHeading(video));
 
     // Create a list element
     let videoListItem = $('<li>');
@@ -62,33 +98,38 @@ $(document).ready(function () {
     // captionDiv.append($('<p>' + video.snippet.description + '</p>'));
     // videoDiv2.append(captionDiv);
 
-    videoDiv.on('click', function (event) {
-      function createVideoEmbedElement (video) {
-        let videoEmbedElement = $('<iframe></iframe>');
-        videoEmbedElement.attr('src', youtube.generateEmbedUrl(video.id.videoId));
-        videoEmbedElement.attr('width', 560);
-        videoEmbedElement.attr('height', 318);
-        return videoEmbedElement
-      }
+    videoDiv.on('click', handleVideoClick);
+    // function (event) {
+    //   function createVideoEmbedElement (video) {
+    //     let videoEmbedElement = $('<iframe></iframe>');
+    //     // let videoId = video.id.videoId;  // old way
+    //     let videoId = $(event.currentTarget).attr('data-video-id');
+    //     videoEmbedElement.attr('src', youtube.generateEmbedUrl(videoId));
+    //     videoEmbedElement.attr('width', 560);
+    //     videoEmbedElement.attr('height', 318);
+    //     return videoEmbedElement
+    //   }
 
-      event.preventDefault();
-      let videoTitle = $('<h2>');
-      videoTitle.html(video.snippet.title);
+    //   event.preventDefault();
+    //   let videoHead = $('<h2>');
+    //   // let videoTitle = video.snippet.title;
+    //   let videoTitle = $(event.currentTarget).attr('data-video-title');
+    //   videoHead.html(videoTitle);
 
-      var videoWatcher = $('#video-watcher');
-      // videoWatcher.hide();  // hide the matched elements
-      // remove all child nodes of the set of matched elements from the DOM
-      videoWatcher.empty();
-      videoWatcher.append(videoTitle);
-      videoWatcher.append(createVideoEmbedElement(video));
-      videoWatcher.show();
-      // videoWatcher.fadeIn(); // display the matched elements by fading them to opaque
-    });
+    //   var videoWatcher = $('#video-watcher');
+    //   // videoWatcher.hide();  // hide the matched elements
+    //   // remove all child nodes of the set of matched elements from the DOM
+    //   videoWatcher.empty();
+    //   videoWatcher.append(videoTitle);
+    //   videoWatcher.append(createVideoEmbedElement(video));
+    //   videoWatcher.show();
+    //   // videoWatcher.fadeIn(); // display the matched elements by fading them to opaque
+    // });
 
-    var videoItem = $('<li>');
-    console.log('videoDiv: ', videoDiv);
-    videoItem.append(videoDiv);
-    $('#videos-list').append(videoItem);
+    // var videoItem = $('<li>');
+    // console.log('videoDiv: ', videoDiv);
+    // videoItem.append(videoDiv);
+    // $('#videos-list').append(videoItem);
 
     // var videoItem2 = $('<li>');
     // videoItem2.append(videoDiv2);
@@ -99,6 +140,57 @@ $(document).ready(function () {
     // $('#videos-list3').append(videoItem3);
   }
 
+  function addVideoToList2(video) {
+    // Add the same video but change the div to have class thumbnail
+    console.log(video);
+
+    // Create a div to put info into
+    let videoDiv = createVideoDiv(video);
+    videoDiv.attr('class', 'thumbnail')
+
+    // Add the image element and the heading
+    videoDiv.append(createVideoImg(video));
+    videoDiv.append(createVideoHeading(video));
+
+    // Create a list element
+    let videoListItem = $('<li>');
+
+    // Add the div with image and heading to the list item element
+    videoListItem.append(videoDiv);
+
+    // Add these to the videos-list element
+    $('#videos-list').append(videoListItem);
+
+    videoDiv.on('click', handleVideoClick);
+  };
+
+  function addVideoToList3(video) {
+    console.log(video);
+
+    let videoDiv = createVideoDiv(video);
+    videoDiv.attr('class', 'thumbnail');
+
+    let cardBody = `
+      <img src="${video.snippet.thumbnails.default.url}"/> 
+      <div class="caption" style="overflow: hidden;">
+        <h4>${video.snippet.title}</h4>
+        <p>${video.snippet.description} </p>
+      </div>`
+
+    videoDiv.append(cardBody);
+
+    // Create a list element
+    let videoListItem = $('<li>');
+
+    // Add the div with cardBody
+    videoListItem.append(videoDiv);
+
+    // Add these to the videos-list element
+    $('#videos-list').append(videoListItem);
+
+    videoDiv.on('click', handleVideoClick);
+  };
+
   function queryYouTube(searchStr) {
     $.ajax({
       type: "GET",
@@ -108,8 +200,8 @@ $(document).ready(function () {
       success: function (result) {
         for (var i = 0; i < result.items.length; i++) {
           addVideoToList(result.items[i]);
-          // addVideoToList2(result.items[i]);
-          // addVideoToList3(result.items[i]);
+          addVideoToList2(result.items[i]);
+          addVideoToList3(result.items[i]);
         }
       }
     });
