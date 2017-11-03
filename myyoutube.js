@@ -1,13 +1,21 @@
+/* eslint-env jquery */ // Enables eslint for jquery
 'use strict';
 // Run code when the document is ready to be manipulated, 
 $(document).ready(function () {
   console.log('document ready jQuery: ', window.jQuery);
 
+  function createVideoImgElement (video) {
+    let thumbnailImg = $('<img>');
+    thumbnailImg.attr('src', video.snippet.thumbnails.default.url);
+    return thumbnailImg;
+  }
+
+  function createVideoHeadingElement(video) {
+    return $('<h5>' + video.snippet.title + '</h5>');
+  }
+
   function addVideoToList(video) {
     console.log(video);
-    var thumbnailUrl = youtube.generateThumbnailUrl(video.id.videoId);
-    var thumbnailImg = $('<img>');
-    thumbnailImg.attr('src', video.snippet.thumbnails.default.url);
 
     // var thumbnailUrl2 = youtube.generateThumbnailUrl(video.id.videoId);
     // var thumbnailImg2 = $('<img>')
@@ -17,28 +25,36 @@ $(document).ready(function () {
     // tnailImg.attr('src', video.snippet.thumbnails.default.url);
 
     // Create a div to put info into
-    var videoDiv = $('<div>')
-    //videoDiv.append(thumbnailImg);
-    thumbnailImg.clone().appendTo(videoDiv)
-    videoDiv.append($('<p>' + video.snippet.title + '</p>'));
-    console.log('videoDiv: ', videoDiv);
-    console.log('tni: ', thumbnailImg)
+    let videoDiv = $('<div>');
 
-//     var videoDiv2 = $('<div>');
-//     videoDiv2.attr('class', 'thumbnail')
-//     videoDiv2.append(thumbnailImg);
-//     console.log('videoDiv2:', videoDiv2);
-//     console.log('videoDiv: ', videoDiv);
-//     console.log('tni2: ', thumbnailImg)
-//     var card = `
-//   <div class="thumbnail">
-//     <img src="${video.snippet.thumbnails.default.url}"/> 
-//     <div class="caption" style="overflow: hidden;">
-//       <h4>${video.snippet.title}</h4>
-//       <p>${video.snippet.description} </p>
-//     </div>
-//   </div>`
-//     console.log('card: ', card)
+    // Add the image element and the heading
+    videoDiv.append(createVideoImgElement(video));
+    videoDiv.append(createVideoHeadingElement(video));
+
+    // Create a list element
+    let videoListItem = $('<li>');
+
+    // Add the div with image and heading to the list item element
+    videoListItem.append(videoDiv);
+
+    // Add these to the videos-list element
+    $('#videos-list').append(videoListItem);
+
+    //     var videoDiv2 = $('<div>');
+    //     videoDiv2.attr('class', 'thumbnail')
+    //     videoDiv2.append(thumbnailImg);
+    //     console.log('videoDiv2:', videoDiv2);
+    //     console.log('videoDiv: ', videoDiv);
+    //     console.log('tni2: ', thumbnailImg)
+    //     var card = `
+    //   <div class="thumbnail">
+    //     <img src="${video.snippet.thumbnails.default.url}"/> 
+    //     <div class="caption" style="overflow: hidden;">
+    //       <h4>${video.snippet.title}</h4>
+    //       <p>${video.snippet.description} </p>
+    //     </div>
+    //   </div>`
+    //     console.log('card: ', card)
 
     // var captionDiv = $('<div>');
     // captionDiv.attr('class', 'caption');
@@ -46,22 +62,27 @@ $(document).ready(function () {
     // captionDiv.append($('<p>' + video.snippet.description + '</p>'));
     // videoDiv2.append(captionDiv);
 
-    videoDiv.on('click', function (e) {
-      e.preventDefault();
-      var videoTitle = $('<h2>');
+    videoDiv.on('click', function (event) {
+      function createVideoEmbedElement (video) {
+        let videoEmbedElement = $('<iframe></iframe>');
+        videoEmbedElement.attr('src', youtube.generateEmbedUrl(video.id.videoId));
+        videoEmbedElement.attr('width', 560);
+        videoEmbedElement.attr('height', 318);
+        return videoEmbedElement
+      }
+
+      event.preventDefault();
+      let videoTitle = $('<h2>');
       videoTitle.html(video.snippet.title);
-      var videoEmbed = $('<iframe></iframe>');
-      videoEmbed.attr('src', youtube.generateEmbedUrl(video.id.videoId));
-      videoEmbed.attr('width', 560);
-      videoEmbed.attr('height', 318);
 
       var videoWatcher = $('#video-watcher');
-    // videoWatcher.hide();  // hide the matched elements
-    // remove all child nodes of the set of matched elements from the DOM
-    videoWatcher.empty(); 
+      // videoWatcher.hide();  // hide the matched elements
+      // remove all child nodes of the set of matched elements from the DOM
+      videoWatcher.empty();
       videoWatcher.append(videoTitle);
-     videoWatcher.append(videoEmbed);
-    // videoWatcher.fadeIn(); // display the matched elements by fading them to opaque
+      videoWatcher.append(createVideoEmbedElement(video));
+      videoWatcher.show();
+      // videoWatcher.fadeIn(); // display the matched elements by fading them to opaque
     });
 
     var videoItem = $('<li>');
@@ -78,9 +99,6 @@ $(document).ready(function () {
     // $('#videos-list3').append(videoItem3);
   }
 
-  // change the query variable to try to get different results from the API
-  // var query = "Tie+Dye";
-
   function queryYouTube(searchStr) {
     $.ajax({
       type: "GET",
@@ -90,6 +108,8 @@ $(document).ready(function () {
       success: function (result) {
         for (var i = 0; i < result.items.length; i++) {
           addVideoToList(result.items[i]);
+          // addVideoToList2(result.items[i]);
+          // addVideoToList3(result.items[i]);
         }
       }
     });
@@ -99,7 +119,9 @@ $(document).ready(function () {
     // Remove any videos currently in the list.
     // This works by removing all child nodes of the set of 
     //   matched elements from the DOM.
+    // Also hide the video viewer.
     $('#videos-list').empty();
+    $('#video-watcher').hide();
   };
 
   function submitQueryRequest(searchStr) {
@@ -115,20 +137,16 @@ $(document).ready(function () {
       let searchStr = $('#searchFor').val()
       submitQueryRequest(searchStr);
     };
-    // Do not let the event actually fire, form does not execute and
-    //   page does not refresh.
-    // return false;
   });
 
-    $('#searchForm').submit(function (event) {
-    // When a value is input to search for and return is entered, this 
+  $('#searchForm').submit(function (event) {
+    // When a value is input to search form and return is entered, this
     //   causes the form submit event to fire. This code is needed to
     //   ignore the default actions and handle the return as a keyup
     //   event causing a request to be submitted to the YouTube API.
-        console.log('handle submit')
-        event.preventDefault();
-        // return false;
-    });
+    console.log('handle submit')
+    event.preventDefault();
+   });
 
   $('#search').on('click', function (event) {
     event.preventDefault();
@@ -136,9 +154,5 @@ $(document).ready(function () {
     submitQueryRequest(searchStr);
   });
 
-  // change the query variable to try to get different results from the API
-//   var query = "Tie+Dye";
-//   queryYouTube(query);
-
-  console.log('you tube key:', youTubeKey);
+   console.log('you tube key:', youTubeKey);
 });
