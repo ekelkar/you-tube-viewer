@@ -1,4 +1,3 @@
-/* eslint-env jquery */ // Enables eslint for jquery
 'use strict';
 // Run code when the document is ready to be manipulated, 
 $(document).ready(function () {
@@ -15,7 +14,7 @@ $(document).ready(function () {
       // videoEmbedElement.attr('height', 315);
       videoEmbedElement.attr('class', 'embed-responsive-item');
       return videoEmbedElement;
-    };
+    }
 
     event.preventDefault();
     // let videoHead = $('<h2>');
@@ -23,7 +22,7 @@ $(document).ready(function () {
     // let videoTitle = $(event.currentTarget).attr('data-video-title');
     // // let videoId = $(event.currentTarget).attr('data-video-id');
     // videoHead.html(videoTitle);
-
+    location.href = '#video-watcher';
     var videoWatcher = $('#video-watcher');
     // videoWatcher.hide();  // hide the matched elements
     // remove all child nodes of the set of matched elements from the DOM
@@ -32,7 +31,7 @@ $(document).ready(function () {
     videoWatcher.append(createVideoEmbedElement());
     videoWatcher.show();
     // videoWatcher.fadeIn(); // display the matched elements by fading them to opaque
-  };
+  }
 
   function createVideoDiv (video) {
     let videoDiv = $('<div>');
@@ -71,7 +70,7 @@ $(document).ready(function () {
     $('#videos-list').append(videoListItem);
 
     videoDiv.on('click', handleVideoClick);
-  };
+  }
   
   function addVideoToList2(video) {
     // Add the same video but change the div to have class thumbnail
@@ -79,7 +78,7 @@ $(document).ready(function () {
 
     // Create a div to put info into
     let videoDiv = createVideoDiv(video);
-    videoDiv.attr('class', 'thumbnail')
+    videoDiv.attr('class', 'thumbnail');
 
     // Add the image element and the heading
     videoDiv.append(createVideoImg(video));
@@ -95,7 +94,7 @@ $(document).ready(function () {
     $('#videos-list').append(videoListItem);
 
     videoDiv.on('click', handleVideoClick);
-  };
+  }
 
   function addVideoToList3(video) {
     console.log(video);
@@ -108,12 +107,13 @@ $(document).ready(function () {
       <div class="caption" style="overflow: hidden;">
         <h4>${video.snippet.title}</h4>
         <p>${video.snippet.description} </p>
-      </div>`
+      </div>`;
 
     videoDiv.append(cardBody);
 
     // Create a list element
     let videoListItem = $('<li>');
+    videoListItem.attr('class', 'list-inline-item');
 
     // Add the div with cardBody
     videoListItem.append(videoDiv);
@@ -122,7 +122,7 @@ $(document).ready(function () {
     $('#videos-list').append(videoListItem);
 
     videoDiv.on('click', handleVideoClick);
-  };
+  }
 
   function queryYouTube(searchStr) {
     $.ajax({
@@ -132,13 +132,13 @@ $(document).ready(function () {
       dataType: "json",
       success: function (result) {
         for (var i = 0; i < result.items.length; i++) {
-          addVideoToList(result.items[i]);
-          addVideoToList2(result.items[i]);
+          // addVideoToList(result.items[i]);
+          // addVideoToList2(result.items[i]);
           addVideoToList3(result.items[i]);
         }
       }
     });
-  };
+  }
 
   function emptyVideoList() {
     // Remove any videos currently in the list.
@@ -147,7 +147,7 @@ $(document).ready(function () {
     // Also hide the video viewer.
     $('#videos-list').empty();
     $('#video-watcher').hide();
-  };
+  }
 
   function submitQueryRequest(searchStr) {
     console.log('search for "%s"', searchStr);
@@ -156,12 +156,12 @@ $(document).ready(function () {
   }
 
   $('#searchFor').on("keyup", function (event) {
-    console.log('keyCode:', event.which)
+    console.log('keyCode:', event.which);
     if (event.which === 13) {
       event.preventDefault();
-      let searchStr = $('#searchFor').val()
+      let searchStr = $('#searchFor').val();
       submitQueryRequest(searchStr);
-    };
+    }
   });
 
   $('#searchForm').submit(function (event) {
@@ -169,7 +169,7 @@ $(document).ready(function () {
     //   causes the form submit event to fire. This code is needed to
     //   ignore the default actions and handle the return as a keyup
     //   event causing a request to be submitted to the YouTube API.
-    console.log('handle submit')
+    console.log('handle submit');
     event.preventDefault();
    });
 
