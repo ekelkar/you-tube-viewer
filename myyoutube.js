@@ -29,6 +29,7 @@ $(document).ready(function () {
     videoDiv.attr('data-video-id', video.id.videoId);
     videoDiv.attr('data-video-title', video.snippet.title);
     videoDiv.attr('class', 'col-sm-4');
+    videoDiv.attr('style', 'height: 100%;')
 
     return videoDiv;
   }
