@@ -36,4 +36,4 @@
         return 'http://www.youtube.com/embed/' + youtube.getIdFromUrl(videoIdOrUrl);
     }
 
-}
+};

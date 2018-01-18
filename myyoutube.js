@@ -7,30 +7,20 @@ $(document).ready(function () {
 
     function createVideoEmbedElement () {
       let videoEmbedElement = $('<iframe></iframe>');
-      // let videoId = video.id.videoId;  // old way
       let videoId = $(event.currentTarget).attr('data-video-id');
+
       videoEmbedElement.attr('src', youtube.generateEmbedUrl(videoId));
-      // videoEmbedElement.attr('width', 560);
-      // videoEmbedElement.attr('height', 315);
       videoEmbedElement.attr('class', 'embed-responsive-item');
+
       return videoEmbedElement;
     }
 
     event.preventDefault();
-    // let videoHead = $('<h2>');
-    // // let videoTitle = video.snippet.title;
-    // let videoTitle = $(event.currentTarget).attr('data-video-title');
-    // // let videoId = $(event.currentTarget).attr('data-video-id');
-    // videoHead.html(videoTitle);
     location.href = '#video-watcher';
     var videoWatcher = $('#video-watcher');
-    // videoWatcher.hide();  // hide the matched elements
-    // remove all child nodes of the set of matched elements from the DOM
     videoWatcher.empty();
-    // videoWatcher.append(videoTitle);
     videoWatcher.append(createVideoEmbedElement());
     videoWatcher.show();
-    // videoWatcher.fadeIn(); // display the matched elements by fading them to opaque
   }
 
   function createVideoDiv (video) {
@@ -49,54 +39,8 @@ $(document).ready(function () {
   function createVideoHeading (video) {
     return $('<h5>' + video.snippet.title + '</h5>');
   }
-  
+
   function addVideoToList(video) {
-    console.log(video);
-
-    // Create a div to put info into
-    let videoDiv = createVideoDiv(video);
-
-    // Add the image element and the heading
-    videoDiv.append(createVideoImg(video));
-    videoDiv.append(createVideoHeading(video));
-
-    // Create a list element
-    let videoListItem = $('<li>');
-
-    // Add the div with image and heading to the list item element
-    videoListItem.append(videoDiv);
-
-    // Add these to the videos-list element
-    $('#videos-list').append(videoListItem);
-
-    videoDiv.on('click', handleVideoClick);
-  }
-  
-  function addVideoToList2(video) {
-    // Add the same video but change the div to have class thumbnail
-    console.log(video);
-
-    // Create a div to put info into
-    let videoDiv = createVideoDiv(video);
-    videoDiv.attr('class', 'thumbnail');
-
-    // Add the image element and the heading
-    videoDiv.append(createVideoImg(video));
-    videoDiv.append(createVideoHeading(video));
-
-    // Create a list element
-    let videoListItem = $('<li>');
-
-    // Add the div with image and heading to the list item element
-    videoListItem.append(videoDiv);
-
-    // Add these to the videos-list element
-    $('#videos-list').append(videoListItem);
-
-    videoDiv.on('click', handleVideoClick);
-  }
-
-  function addVideoToList3(video) {
     console.log(video);
 
     let videoDiv = createVideoDiv(video);
@@ -132,9 +76,7 @@ $(document).ready(function () {
       dataType: "json",
       success: function (result) {
         for (var i = 0; i < result.items.length; i++) {
-          // addVideoToList(result.items[i]);
-          // addVideoToList2(result.items[i]);
-          addVideoToList3(result.items[i]);
+          addVideoToList(result.items[i]);
         }
       }
     });
