@@ -74,15 +74,30 @@ $(document).ready(function () {
   }
 
   function queryYouTube(searchStr) {
+    let youTubeUrl = [
+      'https://www.googleapis.com/youtube/v3/search',
+      '?part=snippet',
+      '&q=', searchStr,
+      '&type=video',
+      '&key=', youTubeKey].join('');
+
+    if (nextPageToken !== '') {
+      youTubeUrl = [
+        youTubeUrl,
+        '&pageToken=', nextPageToken,
+      ].join('');
+    }
+
     $.ajax({
       type: "GET",
-      url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" +
-      searchStr + "&type=video&key=" + youTubeKey,
+      url: youTubeUrl,
       dataType: "json",
       success: function (result) {
         for (var i = 0; i < result.items.length; i++) {
           addVideoToList(result.items[i]);
         }
+        nextPageToken = result.nextPageToken;
+        $('#more').show();
       }
     });
   }
@@ -101,6 +116,8 @@ $(document).ready(function () {
     emptyVideoList();
     queryYouTube(searchStr);
   }
+
+  let nextPageToken = '';
 
   $('#searchFor').on("keyup", function (event) {
     console.log('keyCode:', event.which);
@@ -124,6 +141,17 @@ $(document).ready(function () {
     event.preventDefault();
     let searchStr = $('#searchFor').val();
     submitQueryRequest(searchStr);
+  });
+
+  $('#more-btn').on('click', function (event) {
+    console.log('more');
+    // event.preventDefault();
+    let searchStr = $('#searchFor').val();
+    submitQueryRequest(searchStr);
+  });
+
+  $('.btn').mouseup(function() {
+    this.blur();
   });
 
    console.log('you tube key:', youTubeKey);
