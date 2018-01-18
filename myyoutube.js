@@ -25,8 +25,11 @@ $(document).ready(function () {
 
   function createVideoDiv (video) {
     let videoDiv = $('<div>');
+
     videoDiv.attr('data-video-id', video.id.videoId);
     videoDiv.attr('data-video-title', video.snippet.title);
+    videoDiv.attr('class', 'col-sm-4');
+
     return videoDiv;
   }
 
@@ -44,26 +47,28 @@ $(document).ready(function () {
     console.log(video);
 
     let videoDiv = createVideoDiv(video);
-    videoDiv.attr('class', 'thumbnail');
+    // videoDiv.attr('class', 'thumbnail');
 
     let cardBody = `
-      <img src="${video.snippet.thumbnails.default.url}"/> 
+    <div class="thumbnail">
+      <img src="${video.snippet.thumbnails.default.url}" alt="Card image"/>
       <div class="caption" style="overflow: hidden;">
         <h4>${video.snippet.title}</h4>
         <p>${video.snippet.description} </p>
-      </div>`;
+      </div>
+    </div>`;
 
     videoDiv.append(cardBody);
 
-    // Create a list element
-    let videoListItem = $('<li>');
-    videoListItem.attr('class', 'list-inline-item');
+    // // Create a list element
+    // let videoListItem = $('<li>');
+    // videoListItem.attr('class', 'list-inline-item');
 
-    // Add the div with cardBody
-    videoListItem.append(videoDiv);
+    // // Add the div with cardBody
+    // videoListItem.append(videoDiv);
 
     // Add these to the videos-list element
-    $('#videos-list').append(videoListItem);
+    $('#videos-list').append(videoDiv);
 
     videoDiv.on('click', handleVideoClick);
   }
