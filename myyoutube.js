@@ -29,22 +29,24 @@ $(document).ready(function () {
     videoDiv.attr('data-video-id', video.id.videoId);
     videoDiv.attr('data-video-title', video.snippet.title);
     videoDiv.attr('class', 'col-sm-4');
-    videoDiv.attr('style', 'height: 100%;')
+    videoDiv.attr('style', 'height: 100%;');
 
     return videoDiv;
   }
 
-  function createVideoImg (video) {
-    let thumbnailImg = $('<img>');
-    thumbnailImg.attr('src', video.snippet.thumbnails.default.url);
-    return thumbnailImg;
+  function createVideoRow (videos) {
+    let rowDiv = $('<div>');
+
+    rowDiv.attr('class', 'row');
+    // videoDiv.attr('style', 'height: 100%;');
+    videos.forEach(video => {
+      rowDiv.append(addVideoDiv(video));
+    });
+
+    return rowDiv;
   }
 
-  function createVideoHeading (video) {
-    return $('<h5>' + video.snippet.title + '</h5>');
-  }
-
-  function addVideoToList(video) {
+  function addVideoDiv(video) {
     console.log(video);
 
     let videoDiv = createVideoDiv(video);
@@ -61,13 +63,6 @@ $(document).ready(function () {
 
     videoDiv.append(cardBody);
 
-    // // Create a list element
-    // let videoListItem = $('<li>');
-    // videoListItem.attr('class', 'list-inline-item');
-
-    // // Add the div with cardBody
-    // videoListItem.append(videoDiv);
-
     // Add these to the videos-list element
     $('#videos-list').append(videoDiv);
 
@@ -80,22 +75,20 @@ $(document).ready(function () {
       '?part=snippet',
       '&q=', searchStr,
       '&type=video',
-      '&key=', youTubeKey].join('');
+      '&key=', youTubeKey];
+      // .join('');
 
     if (nextPageToken !== '') {
-      youTubeUrl = [
-        youTubeUrl,
-        '&pageToken=', nextPageToken,
-      ].join('');
+      youTubeUrl.push('&pageToken=' + nextPageToken);
     }
 
     $.ajax({
       type: "GET",
-      url: youTubeUrl,
+      url: youTubeUrl.join(''),
       dataType: "json",
       success: function (result) {
-        for (var i = 0; i < result.items.length; i++) {
-          addVideoToList(result.items[i]);
+        for (let i = 0; i < result.items.length; i = i + 3) {
+          $('#videos-list').append(createVideoRow(result.items.slice(i, i + 3)));
         }
         nextPageToken = result.nextPageToken;
         $('#more').show();
