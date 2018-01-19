@@ -58,15 +58,27 @@ $(document).ready(function () {
       <div class="caption" style="overflow: hidden;">
         <h4>${video.snippet.title}</h4>
         <p>${video.snippet.description} </p>
-      </div>
+      </div>`;
+    // </div>`;
+
+    // videoDiv.append(cardBody);
+
+    let playButton = `
+    <button type="button" class="btn btn-primary col-sm-offset-9"
+    id=${video.id.videoId} data-video-id=${video.id.videoId}
+    data-video-title=${video.snippet.title}">
+      Play
+    </button>
     </div>`;
 
-    videoDiv.append(cardBody);
+    // cardBody.append(playButton);
+    videoDiv.append(cardBody.concat(playButton));
 
     // Add these to the videos-list element
     $('#videos-list').append(videoDiv);
 
-    videoDiv.on('click', handleVideoClick);
+    // videoDiv.on('click', handleVideoClick);
+    $('#'.concat(video.id.videoId)).on('click', handleVideoClick);
   }
 
   function queryYouTube(searchStr) {
